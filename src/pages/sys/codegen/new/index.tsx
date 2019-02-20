@@ -40,7 +40,13 @@ export default class NewCodeGen extends React.Component<Props, State> {
     const { visible, handleCancel } = this.props;
     return (
       <div>
-        <Modal title="Basic Modal" visible={visible} onOk={this.handleOk} onCancel={handleCancel}>
+        <Modal
+          destroyOnClose
+          title="Basic Modal"
+          visible={visible}
+          onOk={this.handleOk}
+          onCancel={handleCancel}
+        >
           asdfsa
         </Modal>
       </div>
