@@ -36,6 +36,7 @@ export default {
     javascriptEnabled: true,
   },
   theme: {
-    'primary-color': '#1890ff',
+    // 'primary-color': '#2C3D62',
+    'primary-color': '#273656',
   },
 };
