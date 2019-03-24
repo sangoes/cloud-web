@@ -1,0 +1,47 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/components/utils.less';
+
+.header {
+  position: relative;
+  height: @nav-height;
+  padding: 0;
+  background: #2c3d62;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  .title {
+    display: inline-block;
+    color: #ffff;
+    line-height: @nav-height;
+    margin-left: @margin;
+  }
+  .menu {
+    display: inline-block;
+    margin-left: 20px;
+  }
+  .right {
+    float: right;
+    margin-right: @margin;
+    height: 100%;
+    overflow: hidden;
+    line-height: @nav-height;
+    .name {
+      color: #ffff;
+    }
+  }
+}
+.subHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 54px;
+  padding: 0;
+  background: #ffff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
+.avatar {
+  margin-right: 8px;
+  color: @primary-color;
+  vertical-align: top;
+  background: rgba(99, 99, 99, 0.85);
+}
