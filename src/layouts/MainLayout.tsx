@@ -1,11 +1,11 @@
 import React from 'react';
-import { Layout, Menu, Avatar, Icon } from 'antd';
+import { Layout, Menu, Avatar, Icon, Breadcrumb } from 'antd';
 import Footer from './Footer';
 import styles from './MainLayout.less';
-import { HeaderDropdown } from 'ant-design-pro';
+import { HeaderDropdown, FooterToolbar } from 'ant-design-pro';
+import Link from 'umi/link';
 
-const { Header, Sider, Content } = Layout;
-const { SubMenu } = Menu;
+const { Content } = Layout;
 
 interface Props {}
 
@@ -52,6 +52,7 @@ export default class MainLayout extends React.Component<Props, State> {
       <Layout>
         <div className={styles.header}>
           <h2 className={styles.title}>叁果科技管理后台</h2>
+          {/* 一级菜单 */}
           <div className={styles.menu}>
             <Menu
               theme="dark"
@@ -59,9 +60,27 @@ export default class MainLayout extends React.Component<Props, State> {
               defaultSelectedKeys={['1']}
               style={{ lineHeight: '48px', backgroundColor: '#2c3d62' }}
             >
-              <Menu.Item key="1">首页</Menu.Item>
-              <Menu.Item key="2">统计</Menu.Item>
-              <Menu.Item key="3">设置</Menu.Item>
+              <Menu.Item key="1">
+                <Link to={'/'}>
+                  <span>
+                    <span>{'首页'}</span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="2">
+                <Link to={'/manage'}>
+                  <span>
+                    <span>{'管理'}</span>
+                  </span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="3">
+                <Link to={'/setting'}>
+                  <span>
+                    <span>{'设置'}</span>
+                  </span>
+                </Link>
+              </Menu.Item>
             </Menu>
           </div>
           {/* 右边 */}
@@ -74,6 +93,7 @@ export default class MainLayout extends React.Component<Props, State> {
             </HeaderDropdown>
           </div>
         </div>
+        {/* 二级菜单 */}
         <div>
           <Menu
             mode="horizontal"
@@ -81,15 +101,56 @@ export default class MainLayout extends React.Component<Props, State> {
             style={{ lineHeight: '54px' }}
             className={styles.subHeader}
           >
-            <Menu.Item key="1">系统设置</Menu.Item>
-            <Menu.Item key="2">管理中心</Menu.Item>
-            <Menu.Item key="3">权限中心</Menu.Item>
+            <Menu.Item key="1">
+              <Link to={'/manage/user'}>
+                <span>
+                  <span>{'用户'}</span>
+                </span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to={'/manage/department'}>
+                <span>
+                  <span>{'部门'}</span>
+                </span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to={'/manage/permission'}>
+                <span>
+                  <span>{'权限'}</span>
+                </span>
+              </Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to={'/manage/menu'}>
+                <span>
+                  <span>{'菜单'}</span>
+                </span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </div>
+        {/* 内容 */}
         <Layout>
-          <Content>main content</Content>
+          <Content className={styles.content}>{this.props.children}</Content>
         </Layout>
-        <Footer />
+        {/* <Footer /> */}
+        {/* 页脚 */}
+        <FooterToolbar
+          extra={
+            <div className={styles.footer}>
+              <Breadcrumb>
+                <Breadcrumb.Item>首页</Breadcrumb.Item>
+                <Breadcrumb.Item>
+                  <a href="">管理</a>
+                </Breadcrumb.Item>
+              </Breadcrumb>
+            </div>
+          }
+        >
+          Copyright <Icon type="copyright" /> 2018 叁果科技出品
+        </FooterToolbar>
       </Layout>
     );
   }

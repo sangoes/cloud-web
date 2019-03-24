@@ -24,7 +24,7 @@ export default {
           exclude: [],
           include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'antd/es'],
         },
-        hardSource: true,
+        // hardSource: true,
       },
     ],
   ],
