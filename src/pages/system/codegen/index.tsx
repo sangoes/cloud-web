@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './index.less';
-import { Button } from 'antd';
+import { Button, Table, Icon } from 'antd';
 import NewCodeGen from './new';
+import { ContentLayout } from '@/components/ContentLayout';
 
 interface Props {}
 
@@ -39,18 +40,30 @@ export default class CodeGenPage extends React.Component<Props, State> {
    */
   render() {
     const { newCodeGenVisible } = this.state;
+
     return (
-      <div>
-        <Button type="primary" onClick={() => this.setCodeGenVisible(true)}>
-          新建
-        </Button>
-        {newCodeGenVisible && (
-          <NewCodeGen
-            visible={newCodeGenVisible}
-            handleCancel={() => this.setCodeGenVisible(false)}
-          />
-        )}
-      </div>
+      <ContentLayout>
+        <div>
+          <div className={styles.tableList}>
+            <Button icon="plus" type="primary" onClick={() => this.setCodeGenVisible(true)}>
+              新建生成配置
+            </Button>
+          </div>
+          {/* 表格 */}
+          <div>
+            <Table dataSource={[]}>
+              <Table.Column key="name" title="" dataIndex="name" />
+            </Table>
+          </div>
+          {/* 新建代码 */}
+          {newCodeGenVisible && (
+            <NewCodeGen
+              visible={newCodeGenVisible}
+              handleCancel={() => this.setCodeGenVisible(false)}
+            />
+          )}
+        </div>
+      </ContentLayout>
     );
   }
 }

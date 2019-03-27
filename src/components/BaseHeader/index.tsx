@@ -72,14 +72,14 @@ export class BaseHeader extends React.Component<Props, State> {
               <Menu.Item key="2">
                 <Link to={'/manage'}>
                   <span>
-                    <span>{'管理'}</span>
+                    <span>{'权限'}</span>
                   </span>
                 </Link>
               </Menu.Item>
               <Menu.Item key="3">
                 <Link to={'/setting'}>
                   <span>
-                    <span>{'设置'}</span>
+                    <span>{'系统'}</span>
                   </span>
                 </Link>
               </Menu.Item>
