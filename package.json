@@ -22,6 +22,7 @@
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.2",
     "@types/react-test-renderer": "^16.0.3",
+    "@types/uuid": "^3.4.4",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.4.0",
     "eslint-config-umi": "^1.4.0",

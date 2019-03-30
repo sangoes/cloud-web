@@ -39,4 +39,11 @@ export default {
     // 'primary-color': '#2C3D62',
     'primary-color': '#273656',
   },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:6281/api',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
 };
