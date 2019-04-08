@@ -16,7 +16,7 @@ export default class BaseTable extends React.Component<Props, State> {
   render() {
     return (
       <div className={styles.table}>
-        <Table rowKey="id" {...this.props} />
+        <Table rowKey="id" size="middle" {...this.props} />
       </div>
     );
   }

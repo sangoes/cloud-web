@@ -104,28 +104,28 @@ export class BaseHeader extends React.Component<Props, State> {
             className={styles.subHeader}
           >
             <Menu.Item key="1">
-              <Link to={'/manage/user'}>
+              <Link to={'/system/user'}>
                 <span>
                   <span>{'用户'}</span>
                 </span>
               </Link>
             </Menu.Item>
             <Menu.Item key="2">
-              <Link to={'/manage/department'}>
+              <Link to={'/system/department'}>
                 <span>
                   <span>{'部门'}</span>
                 </span>
               </Link>
             </Menu.Item>
             <Menu.Item key="3">
-              <Link to={'/manage/permission'}>
+              <Link to={'/system/permission'}>
                 <span>
                   <span>{'权限'}</span>
                 </span>
               </Link>
             </Menu.Item>
             <Menu.Item key="4">
-              <Link to={'/manage/menu'}>
+              <Link to={'/system/menu'}>
                 <span>
                   <span>{'菜单'}</span>
                 </span>
