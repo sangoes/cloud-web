@@ -91,16 +91,21 @@ class AddDict extends React.Component<Props, State> {
                 rules: [{ required: true }],
               })(<Input placeholder="字典值" />)}
             </FormItem>
+            {/* 备注 */}
+            <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="备注">
+              {form.getFieldDecorator('des', {
+                rules: [],
+              })(<Input placeholder="备注" />)}
+            </FormItem>
             {/* 按钮 */}
-            <div className={styles.btn}>
-              <Button onClick={this._onEditClick}>编辑</Button>
-              <Button type="primary" onClick={this._onSaveClick}>
+            <div className={styles.btnGroup}>
+              <Button className={styles.btn} onClick={this._onEditClick}>
+                编辑
+              </Button>
+              <Button className={styles.btn} type="primary" onClick={this._onSaveClick}>
                 确定
               </Button>
-              <Button type="primary" onClick={this._onUpdateClick}>
-                更新
-              </Button>
-              <Button type="danger" ghost onClick={this._onDeleteDict}>
+              <Button className={styles.btn} type="danger" ghost onClick={this._onDeleteDict}>
                 删除
               </Button>
             </div>

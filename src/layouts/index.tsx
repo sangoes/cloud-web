@@ -14,6 +14,7 @@ export interface BasicLayoutProps extends React.Props<any> {
 const BasicLayout: BasicLayoutComponent<BasicLayoutProps> = props => {
   const { location } = props;
   const currentPath = location.pathname;
+
   // 注册 登录
   if (currentPath.startsWith('/member')) {
     return <MemberLayout>{props.children}</MemberLayout>;
