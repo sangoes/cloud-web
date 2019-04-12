@@ -30,8 +30,6 @@ const checkStatus = (response: any) => {
   }
   // 格式化text
   const msg = response.msg || codeMessage[response.code] || response.error_description;
-  // message
-
   // 错误
   const error = new Error(msg);
   error.name = response.code;
@@ -94,6 +92,7 @@ export default function request(url: any, option?: any) {
       }
       // 没有找到
       if (status === 404) {
+        return;
       }
     });
 }

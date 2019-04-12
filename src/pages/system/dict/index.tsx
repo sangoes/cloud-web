@@ -5,8 +5,13 @@ import styles from './index.less';
 import AddDict from './add';
 import BaseTable from '@/components/BaseTable';
 import { ColumnProps } from 'antd/lib/table';
+import { connect } from 'dva';
+import { createAction } from '@/utils';
+import { ADD } from '@/actions/upms/dict';
 
-interface Props {}
+interface Props {
+  dispatch?: any;
+}
 
 interface State {
   addDictVisible?: boolean;
@@ -40,11 +45,14 @@ const columns = [
  * @class DictManage
  * @extends {React.Component<Props, State>}
  */
+@connect(({ dict }) => ({ ...dict }))
 export default class DictManage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {};
   }
+  componentDidMount = () => {};
+
   /**
    * @description 设置生产代码Modal看见与否
    * @private
@@ -55,6 +63,17 @@ export default class DictManage extends React.Component<Props, State> {
       addDictVisible: visible,
     });
   };
+
+  /**
+   * @description 保存字典
+   * @private
+   * @memberof DictManage
+   */
+
+  private saveDict = (fields: any) => {
+    this.props.dispatch(createAction(ADD)({ ...fields }));
+  };
+
   /**
    * @description 渲染
    * @author jerrychir
@@ -75,7 +94,11 @@ export default class DictManage extends React.Component<Props, State> {
           <BaseTable columns={columns} dataSource={[]} />
         </div>
         {/* 添加字典 */}
-        <AddDict visible={addDictVisible} handleCancel={() => this.setDictVisible(false)} />
+        <AddDict
+          visible={addDictVisible}
+          handleOk={this.saveDict}
+          handleCancel={() => this.setDictVisible(false)}
+        />
       </ContentLayout>
     );
   }

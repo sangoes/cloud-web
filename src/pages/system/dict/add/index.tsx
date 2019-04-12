@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Form, Tree, Icon, Input, Row, Col, Button } from 'antd';
+import { Modal, Form, Tree, Icon, Input, Row, Col, Button, TreeSelect } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import styles from '../index.less';
 
@@ -40,6 +40,55 @@ class AddDict extends React.Component<Props, State> {
     });
   };
   /**
+   * @description 所属字典
+   * @private
+   * @memberof AddDict
+   */
+  private renderDictSelect = () => {
+    const treeData = [
+      {
+        title: 'Node1',
+        value: '0-0',
+        key: '0-0',
+        children: [
+          {
+            title: 'Child Node1',
+            value: '0-0-1',
+            key: '0-0-1',
+          },
+          {
+            title: 'Child Node2',
+            value: '0-0-2',
+            key: '0-0-2',
+          },
+        ],
+      },
+      {
+        title: 'Node2',
+        value: '0-1',
+        key: '0-1',
+      },
+    ];
+    return (
+      <TreeSelect
+        style={{ width: '100%' }}
+        // value={this.state.value}
+        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+        treeData={treeData}
+        placeholder="Please select"
+        treeDefaultExpandAll
+        // onChange={this.onChange}
+      />
+    );
+  };
+
+  /**
+   * @description 操作字典
+   * @private
+   * @memberof AddDict
+   */
+  private handleDict = (type: 'save' | 'update') => {};
+  /**
    * @description 渲染
    * @author jerrychir
    * @returns
@@ -61,8 +110,8 @@ class AddDict extends React.Component<Props, State> {
             <DirectoryTree
               multiple
               defaultExpandAll
-              onSelect={this.onSelect}
-              onExpand={this.onExpand}
+              // onSelect={this.onSelect}
+              // onExpand={this.onExpand}
             >
               <TreeNode icon={<Icon type="setting" />} title="设置" key="0-0">
                 <TreeNode title="系统设置" key="0-0-0" isLeaf />
@@ -75,19 +124,20 @@ class AddDict extends React.Component<Props, State> {
           <div className={styles.form}>
             {/* 所属字典 */}
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="所属字典">
-              {form.getFieldDecorator('parentDict', {
+              {form.getFieldDecorator('pid', {
+                initialValue: '-1',
                 rules: [{ required: true }],
-              })(<Input placeholder="所属字典" />)}
+              })(this.renderDictSelect())}
             </FormItem>
             {/* 字典名称 */}
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="字典名称">
-              {form.getFieldDecorator('dictKey', {
+              {form.getFieldDecorator('dictValue', {
                 rules: [{ required: true }],
               })(<Input placeholder="字典名称" />)}
             </FormItem>
             {/* 字典值 */}
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="字典值">
-              {form.getFieldDecorator('dictValue', {
+              {form.getFieldDecorator('dictKey', {
                 rules: [{ required: true }],
               })(<Input placeholder="字典值" />)}
             </FormItem>
@@ -99,13 +149,10 @@ class AddDict extends React.Component<Props, State> {
             </FormItem>
             {/* 按钮 */}
             <div className={styles.btnGroup}>
-              <Button className={styles.btn} onClick={this._onEditClick}>
+              <Button className={styles.btn} onClick={() => this.handleDict}>
                 编辑
               </Button>
-              <Button className={styles.btn} type="primary" onClick={this._onSaveClick}>
-                确定
-              </Button>
-              <Button className={styles.btn} type="danger" ghost onClick={this._onDeleteDict}>
+              <Button className={styles.btn} type="danger" ghost onClick={() => this.handleDict}>
                 删除
               </Button>
             </div>

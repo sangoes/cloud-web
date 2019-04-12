@@ -2,6 +2,11 @@
  * 网络请求
  */
 export { default as request } from './request';
+
+/**
+ * 工具
+ */
+// export { default as utils } from './utils';
 /**
  * 统一处理action
  * @param {*} type
