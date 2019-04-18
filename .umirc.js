@@ -36,8 +36,8 @@ export default {
     javascriptEnabled: true,
   },
   theme: {
-    // 'primary-color': '#2C3D62',
     'primary-color': '#273656',
+    // 'table-row-hover-bg': rgba(3, 1, 3, 1),
   },
   proxy: {
     '/api': {

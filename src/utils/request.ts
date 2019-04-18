@@ -1,3 +1,5 @@
+import { message } from 'antd';
+
 /**
  * code 对应
  */
@@ -93,6 +95,10 @@ export default function request(url: any, option?: any) {
       // 没有找到
       if (status === 404) {
         return;
+      }
+      // 方法错误
+      if (status === 417) {
+        message.error(msg);
       }
     });
 }

@@ -2,15 +2,16 @@
  * 字典表接口
  */
 export interface DictState {
-  list: ListItem[];
-  page: PageItem;
+  dictList: [];
+  dictPage: {};
   dict: {};
+  treeDict: [];
 }
 
 /**
  * 列表
  */
-export interface ListItem {
+export interface ListDictItem {
   // 主键
   id: string;
   // 创建日期
@@ -38,4 +39,24 @@ export interface ListItem {
 /**
  * 分页
  */
-export interface PageItem {}
+export interface PageDictItem {
+  records: ListDictItem[];
+  total: number;
+  size: number;
+  current: number;
+  searchCount: boolean;
+  pages: number;
+}
+
+/**
+ * 树形
+ */
+export interface TreeDict {
+  id: string;
+  pid: string;
+  children: TreeDict[];
+  title: string;
+  key: string;
+  value: string;
+  des: string;
+}

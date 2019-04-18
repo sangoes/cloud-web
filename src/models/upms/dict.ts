@@ -13,57 +13,66 @@ const NAMESPACE = 'dict';
 const model: DvaModel<DictState> = {
   namespace: NAMESPACE,
   state: {
-    list: [],
-    page: [],
+    dictList: [],
+    dictPage: {},
     dict: {},
+    treeDict: [],
   },
   effects: {
     // 添加字典表
     *add({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
-      const response = yield call(dict.add, payload);
+      const response = yield call(dict.addDict, payload);
       if (check(response)) {
-        callback && callback();
         message.success(response.msg);
+        callback && callback();
       }
     },
     // 删除字典表
     *remove({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
-      const response = yield call(dict.remove, payload);
+      const response = yield call(dict.removeDict, payload);
       if (check(response)) {
-        callback && callback();
         message.success(response.msg);
+        callback && callback();
       }
     },
     // 更新字典表
     *update({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
-      const response = yield call(dict.update, payload);
+      const response = yield call(dict.updateDict, payload);
       if (check(response)) {
-        callback && callback();
         message.success(response.msg);
+        callback && callback();
       }
     },
     // 获取字典表
     *getById({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
-      const response = yield call(dict.getById, payload);
+      const response = yield call(dict.getDict, payload);
       if (check(response)) {
-        callback && callback();
         yield put(createAction(SAVE)({ dict: response.data }));
+        callback && callback();
       }
     },
     // 获取列表字典表
     *list({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
-      const response = yield call(dict.list, payload);
+      const response = yield call(dict.listDict, payload);
       if (check(response)) {
+        yield put(createAction(SAVE)({ dictList: response.data }));
         callback && callback();
-        yield put(createAction(SAVE)({ list: response.data }));
       }
     },
     // 分页字典表
     *page({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
-      const response = yield call(dict.page, payload);
+      const response = yield call(dict.pageDict, payload);
       if (check(response)) {
+        yield put(createAction(SAVE)({ dictPage: response.data }));
         callback && callback();
-        yield put(createAction(SAVE)({ page: response.data }));
+      }
+    },
+    // 查询字典表树形
+    *treeDict({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
+      const response = yield call(dict.treeDict, payload);
+      if (check(response)) {
+        yield put(createAction(SAVE)({ treeDict: response.data }));
+        callback && callback();
       }
     },
   },

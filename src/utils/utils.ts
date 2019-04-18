@@ -1,3 +1,4 @@
-import { TreeSelect } from 'antd';
+import React from 'react';
+import { Tree } from 'antd';
 
-const TreeNode = TreeSelect.TreeNode;
+const { TreeNode } = Tree;

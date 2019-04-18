@@ -9,7 +9,7 @@ import { stringify } from 'querystring';
  * @param {*} params
  * @returns
  */
-export async function add(params) {
+export async function addDict(params) {
   return request(`/api/upms/dict`, {
     method: 'POST',
     body: params,
@@ -23,8 +23,8 @@ export async function add(params) {
  * @param {*} params
  * @returns
  */
-export async function remove(params) {
-  return request(`upms/dict/${params}`, {
+export async function removeDict(params) {
+  return request(`/api/upms/dict/${params}`, {
     method: 'DELETE',
   });
 }
@@ -36,8 +36,8 @@ export async function remove(params) {
  * @param {*} params
  * @returns
  */
-export async function update(params) {
-  return request('upms/dict', {
+export async function updateDict(params) {
+  return request('/api/upms/dict', {
     method: 'PUT',
     body: params,
   });
@@ -50,8 +50,8 @@ export async function update(params) {
  * @param {*} params
  * @returns
  */
-export async function getById(params) {
-  return request(`upms/dict/${params}`);
+export async function getDict(params) {
+  return request(`/api/upms/dict/${params}`);
 }
 
 /**
@@ -61,8 +61,8 @@ export async function getById(params) {
  * @param {*} params
  * @returns
  */
-export async function list(params) {
-  return request(`upms/dict/list?${stringify(params)}`);
+export async function listDict(params) {
+  return request(`/api/upms/dict/list?${stringify(params)}`);
 }
 
 /**
@@ -72,6 +72,17 @@ export async function list(params) {
  * @param {*} params
  * @returns
  */
-export async function page(params) {
-  return request(`upms/dict/page?${stringify(params)}`);
+export async function pageDict(params) {
+  return request(`/api/upms/dict/page?${stringify(params)}`);
+}
+
+/**
+ * @description 获取 字典表 树形
+ * @author jerrychir
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function treeDict(params) {
+  return request(`/api/upms/dict/tree/${params}`);
 }
