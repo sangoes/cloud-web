@@ -24,8 +24,23 @@ export async function addDict(params) {
  * @returns
  */
 export async function removeDict(params) {
-  return request(`/api/upms/dict/${params}`, {
+  return request('/api/upms/dict', {
     method: 'DELETE',
+    body: params,
+  });
+}
+
+/**
+ * @description 批量删除 字典表
+ * @author jerrychir
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function batchRemoveDict(params) {
+  return request('/api/upms/dict/batch', {
+    method: 'DELETE',
+    body: params,
   });
 }
 

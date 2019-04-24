@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Button, Icon, Divider, Dropdown, Menu } from 'antd';
+import { Button, Icon, Divider, Dropdown, Menu, Modal } from 'antd';
 import { ContentLayout } from '@/components/ContentLayout';
 import styles from './index.less';
 import BaseTable from '@/components/BaseTable';
@@ -12,9 +12,12 @@ import {
 import { connect } from 'dva';
 import { createActions, createAction } from '@/utils';
 import { ListDictItem, PageDictItem, TreeDict } from '@/interface/upms/dict';
-import { ADD_DICT, PAGE_DICT, TREE_DICT, UPDATE_DICT } from '@/actions/upms/dict';
+import { ADD_DICT, PAGE_DICT, BATCH_REMOVE_DICT } from '@/actions/upms/dict';
 import AddDict from './add';
 import AddSubDict from './check';
+import { REMOVE_DICT } from '../../../actions/upms/dict';
+
+const confirm = Modal.confirm;
 interface Props {
   dispatch?: any;
   dictPage: PageDictItem;
@@ -25,6 +28,7 @@ interface State {
   addDictVisible?: boolean;
   addSubDictVisible?: boolean;
   dictItem?: ListDictItem;
+  selectedRows: [];
 }
 
 /**
@@ -38,7 +42,9 @@ interface State {
 export default class DictManage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedRows: [],
+    };
   }
   componentDidMount = () => {
     // 分页
@@ -97,27 +103,55 @@ export default class DictManage extends React.Component<Props, State> {
       })
     );
   };
+
   /**
-   * @description 保存子字典
+   * @description 删除字典
    * @private
    * @memberof DictManage
    */
-  private saveSubDict = (fields: any, mode: string) => {
-    switch (mode) {
-      // 保存
-      case 'save':
-        console.log(fields);
+  private deleteDict = (value: string) => {
+    const { dispatch } = this.props;
+    const { dictItem } = this.state;
+    confirm({
+      title: '确定删除字典?',
+      content: '一旦删除将不可恢复数据',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        dispatch(createAction(REMOVE_DICT)({ key: value, pkey: dictItem && dictItem.id }));
+      },
+      onCancel() {},
+    });
+  };
 
-        this.props.dispatch(createAction(TREE_DICT)({ ...fields }));
-        break;
-      // 更新
-      case 'update':
-        console.log(fields);
-        this.props.dispatch(createAction(UPDATE_DICT)({ ...fields }));
-        break;
-      default:
-        break;
-    }
+  /**
+   * @description 批量删除
+   * @private
+   * @memberof DictManage
+   */
+  private batchDeleteDict = () => {
+    const { selectedRows } = this.state;
+    const selectedKeys = selectedRows.map((item: ListDictItem) => {
+      return item.id;
+    });
+    const { dispatch } = this.props;
+    const _this = this;
+    confirm({
+      title: '确定批量删除字典?',
+      content: '一旦删除将不可恢复数据',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        dispatch(
+          createActions(BATCH_REMOVE_DICT)({ keys: selectedKeys })(() => {
+            _this.setState({ selectedRows: [] });
+          })
+        );
+      },
+      onCancel() {},
+    });
   };
 
   /**
@@ -142,6 +176,31 @@ export default class DictManage extends React.Component<Props, State> {
   };
 
   /**
+   * @description 更多按钮点击
+   * @private
+   * @memberof DictManage
+   */
+  private handleMoreMenu = (key: any, item: ListDictItem) => {
+    switch (key) {
+      case 'delete':
+        this.deleteDict(item.id);
+        break;
+
+      default:
+        break;
+    }
+  };
+  /**
+   * @description 更多按钮
+   * @memberof DictManage
+   */
+  moreMenu = (item: ListDictItem) => (
+    <Menu onClick={({ key }) => this.handleMoreMenu(key, item)}>
+      <Menu.Item key="delete">删除</Menu.Item>
+    </Menu>
+  );
+
+  /**
    * @description 字典列
    * @type {ColumnProps<ListDictItem>[]}
    * @memberof DictManage
@@ -151,6 +210,7 @@ export default class DictManage extends React.Component<Props, State> {
       key: 'dictValue',
       title: '字典名称',
       dataIndex: 'dictValue',
+      sorter: true,
     },
     {
       key: 'dictKey',
@@ -161,22 +221,15 @@ export default class DictManage extends React.Component<Props, State> {
       title: '操作',
       align: 'center',
       render: (text, record) => (
-        <span>
+        <Fragment>
           <a onClick={() => this.checkDict(record)}>查看</a>
           <Divider type="vertical" />
-          <Dropdown
-            overlay={
-              <Menu onClick={({ key }) => {}}>
-                <Menu.Item key="edit">编辑</Menu.Item>
-                <Menu.Item key="delete">删除</Menu.Item>
-              </Menu>
-            }
-          >
+          <Dropdown overlay={() => this.moreMenu(record)}>
             <a>
               更多 <Icon type="down" />
             </a>
           </Dropdown>
-        </span>
+        </Fragment>
       ),
     },
   ];
@@ -188,15 +241,16 @@ export default class DictManage extends React.Component<Props, State> {
    * @memberof DictManage
    */
   render() {
-    const { addDictVisible, addSubDictVisible, dictItem } = this.state;
+    const { addDictVisible, addSubDictVisible, dictItem, selectedRows } = this.state;
     const { dictPage, pageDictLoading } = this.props;
     return (
       <ContentLayout>
         <div>
           <div className={styles.tableList}>
-            <Button icon="plus" type="primary" onClick={() => this.addDict()}>
+            <Button icon="plus" type="primary" onClick={this.addDict}>
               新建字典
             </Button>
+            {selectedRows.length > 0 && <Button onClick={this.batchDeleteDict}>批量删除</Button>}
           </div>
           {/* 表格 */}
           <BaseTable
@@ -204,6 +258,7 @@ export default class DictManage extends React.Component<Props, State> {
             data={dictPage}
             loading={pageDictLoading}
             onChange={this.handleTableChange}
+            onSelectRow={selectedRows => this.setState({ selectedRows })}
           />
         </div>
         {/* 添加字典 */}
@@ -216,8 +271,8 @@ export default class DictManage extends React.Component<Props, State> {
         {addSubDictVisible && (
           <AddSubDict
             visible={addSubDictVisible}
-            handleOk={this.saveSubDict}
             item={dictItem}
+            remove={this.deleteDict}
             handleCancel={() => this.setSubDictVisible(false)}
           />
         )}

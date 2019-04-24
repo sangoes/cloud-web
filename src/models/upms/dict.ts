@@ -24,13 +24,13 @@ const model: DvaModel<DictState> = {
       const response = yield call(dict.addDict, payload);
       if (check(response)) {
         message.success(response.msg);
-        // const dictId = response.data;
-        // // 分页
-        // const { key } = payload;
+        const { key } = payload;
+        // 分页
         yield put(createAction('page')({}));
-        // // 树形
-        // const dictKey = key || dictId;
-        // yield put(createAction('treeDict')(dictKey));
+        // 树形
+        if (key) {
+          yield put(createAction('treeDict')(key));
+        }
         callback && callback();
       }
     },
@@ -39,6 +39,23 @@ const model: DvaModel<DictState> = {
       const response = yield call(dict.removeDict, payload);
       if (check(response)) {
         message.success(response.msg);
+        const { pkey } = payload;
+        // 分页
+        yield put(createAction('page')({}));
+        // 树形
+        if (pkey) {
+          yield put(createAction('treeDict')(pkey));
+        }
+        callback && callback();
+      }
+    },
+    // 批量删除字典表
+    *batchRemove({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
+      const response = yield call(dict.batchRemoveDict, payload);
+      if (check(response)) {
+        message.success(response.msg);
+        // 分页
+        yield put(createAction('page')({}));
         callback && callback();
       }
     },
@@ -47,6 +64,13 @@ const model: DvaModel<DictState> = {
       const response = yield call(dict.updateDict, payload);
       if (check(response)) {
         message.success(response.msg);
+        const { key } = payload;
+        // 分页
+        yield put(createAction('page')({}));
+        // 树形
+        if (key) {
+          yield put(createAction('treeDict')(key));
+        }
         callback && callback();
       }
     },

@@ -10,6 +10,11 @@ export const ADD_DICT = 'dict/add';
 export const REMOVE_DICT = 'dict/remove';
 
 /**
+ *  删除字典表
+ */
+export const BATCH_REMOVE_DICT = 'dict/batchRemove';
+
+/**
  *  字典表分页
  */
 export const PAGE_DICT = 'dict/page';

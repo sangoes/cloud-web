@@ -4,8 +4,8 @@ import { FormComponentProps } from 'antd/lib/form';
 import styles from '../index.less';
 import { TreeDict, ListDictItem } from '@/interface/upms/dict';
 import { AntTreeNodeSelectedEvent } from 'antd/lib/tree';
-import { createActions } from '@/utils';
-import { TREE_DICT } from '@/actions/upms/dict';
+import { createActions, createAction } from '@/utils';
+import { TREE_DICT, ADD_DICT, UPDATE_DICT } from '@/actions/upms/dict';
 import { connect } from 'dva';
 import { getTreeItem } from '@/utils/utils';
 import Loading from '@/components/Loading';
@@ -20,8 +20,8 @@ interface Props extends FormComponentProps {
   visible?: boolean;
   item?: ListDictItem;
   treeDict?: TreeDict[];
-  handleOk?: (value: string, mode: string) => any;
   handleCancel?: () => void;
+  remove?: (value: string) => any;
 }
 
 interface State {
@@ -34,7 +34,7 @@ interface State {
   // 临时项目
   tempItem?: TreeDict;
   // 模式 添加|更新
-  mode: 'save' | 'update';
+  mode: 'save' | 'update' | 'none';
 }
 
 /**
@@ -51,7 +51,7 @@ class AddSubDict extends React.Component<Props, State> {
     this.state = {
       disabled: true,
       selectedKeys: [],
-      mode: 'save',
+      mode: 'none',
     };
   }
   /**
@@ -81,14 +81,35 @@ class AddSubDict extends React.Component<Props, State> {
    * @memberof AddSubDict
    */
   private handleOk = () => {
-    const { form, handleOk } = this.props;
+    const { form } = this.props;
     const { mode, tempItem } = this.state;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      if (mode === 'save') {
-        fieldsValue.pid = tempItem.id;
+      // handleOk(fieldsValue, mode);
+      const { item, form } = this.props;
+      switch (mode) {
+        case 'save':
+          fieldsValue.pid = tempItem.id;
+          this.props.dispatch(
+            createActions(ADD_DICT)({ ...fieldsValue, key: item.id })(() => {
+              form.resetFields();
+              this.setState({ dictItem: tempItem, disabled: true, mode: 'none' });
+            })
+          );
+          break;
+        case 'update':
+          fieldsValue.id = tempItem.id;
+          fieldsValue.pid = tempItem.pid;
+          this.props.dispatch(
+            createActions(UPDATE_DICT)({ ...fieldsValue, key: item.id })(() => {
+              form.resetFields();
+              this.setState({ dictItem: tempItem, disabled: true, mode: 'none' });
+            })
+          );
+          break;
+        default:
+          break;
       }
-      handleOk(fieldsValue, mode);
     });
   };
 
@@ -124,6 +145,8 @@ class AddSubDict extends React.Component<Props, State> {
    * @memberof AddDict
    */
   private handleDict = (type: string) => {
+    const { tempItem } = this.state;
+    const { remove } = this.props;
     switch (type) {
       // 编辑
       case 'edit':
@@ -135,24 +158,11 @@ class AddSubDict extends React.Component<Props, State> {
         break;
       // 返回
       case 'return':
-        const { tempItem } = this.state;
-        this.setState({ dictItem: tempItem, disabled: true, mode: 'save' });
+        this.setState({ dictItem: tempItem, disabled: true, mode: 'none' });
         break;
       // 删除
       case 'delete':
-        confirm({
-          title: 'Are you sure delete this task?',
-          content: 'Some descriptions',
-          okText: 'Yes',
-          okType: 'danger',
-          cancelText: 'No',
-          onOk() {
-            console.log('OK');
-          },
-          onCancel() {
-            console.log('Cancel');
-          },
-        });
+        remove(tempItem.id);
         break;
       default:
         break;
@@ -166,7 +176,7 @@ class AddSubDict extends React.Component<Props, State> {
    */
   render() {
     const { visible, handleCancel, form, treeDict } = this.props;
-    const { disabled, selectedKeys, dictItem } = this.state;
+    const { disabled, selectedKeys, dictItem, mode } = this.state;
     return (
       <Modal
         title="添加字典"
@@ -175,6 +185,7 @@ class AddSubDict extends React.Component<Props, State> {
         destroyOnClose
         onOk={this.handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ disabled: mode === 'none' ? true : false }}
         // confirmLoading={confirmLoading}
       >
         <div className={styles.content}>
