@@ -34,7 +34,7 @@ export class BaseFooter extends React.Component<Props, State> {
           </div>
         }
       >
-        Copyright <Icon type="copyright" /> 2018 叁果科技出品
+        Copyright <Icon type="copyright" /> 2018 尼克魔法出品
       </FooterToolbar>
     );
   }

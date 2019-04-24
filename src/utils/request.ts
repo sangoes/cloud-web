@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import router from 'umi/router';
 
 /**
  * code 对应
@@ -80,20 +81,24 @@ export default function request(url: any, option?: any) {
       const status = e.name;
       const msg = e.message;
 
-      // 请求失败
+      // 未授权
       if (status === 401) {
+        // router.push('/exception/403');
         return;
       }
       // 禁止访问
       if (status === 403) {
+        router.push('/exception/403');
         return;
       }
       // 内部错误
       if (status <= 504 && status >= 500) {
+        router.push('/exception/500');
         return;
       }
       // 没有找到
       if (status === 404) {
+        router.push('/exception/404');
         return;
       }
       // 方法错误

@@ -20,10 +20,17 @@ const model: DvaModel<DictState> = {
   },
   effects: {
     // 添加字典表
-    *add({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
+    *add({ payload, callback }: ReduxAction, { call, put, select }: ReduxSagaEffects) {
       const response = yield call(dict.addDict, payload);
       if (check(response)) {
         message.success(response.msg);
+        // const dictId = response.data;
+        // // 分页
+        // const { key } = payload;
+        yield put(createAction('page')({}));
+        // // 树形
+        // const dictKey = key || dictId;
+        // yield put(createAction('treeDict')(dictKey));
         callback && callback();
       }
     },

@@ -1,15 +1,20 @@
 import React, { Fragment } from 'react';
-import { Table, Button, Icon, Divider, Popconfirm, Dropdown, Menu } from 'antd';
+import { Button, Icon, Divider, Dropdown, Menu } from 'antd';
 import { ContentLayout } from '@/components/ContentLayout';
 import styles from './index.less';
-import AddDict from './add';
 import BaseTable from '@/components/BaseTable';
-import { ColumnProps } from 'antd/lib/table';
+import {
+  ColumnProps,
+  PaginationConfig,
+  SorterResult,
+  TableCurrentDataSource,
+} from 'antd/lib/table';
 import { connect } from 'dva';
-import { createAction } from '@/utils';
-import { ListDictItem, PageDictItem } from '@/interface/upms/dict';
-import { ADD_DICT, PAGE_DICT } from '@/actions/upms/dict';
-
+import { createActions, createAction } from '@/utils';
+import { ListDictItem, PageDictItem, TreeDict } from '@/interface/upms/dict';
+import { ADD_DICT, PAGE_DICT, TREE_DICT, UPDATE_DICT } from '@/actions/upms/dict';
+import AddDict from './add';
+import AddSubDict from './check';
 interface Props {
   dispatch?: any;
   dictPage: PageDictItem;
@@ -18,7 +23,7 @@ interface Props {
 
 interface State {
   addDictVisible?: boolean;
-  dictMode?: 'add' | 'check';
+  addSubDictVisible?: boolean;
   dictItem?: ListDictItem;
 }
 
@@ -29,14 +34,32 @@ interface State {
  * @class DictManage
  * @extends {React.Component<Props, State>}
  */
-@connect(({ dict, loading }) => ({ ...dict, pageDictLoading: loading.effects['dict/dictPage'] }))
+@connect(({ dict, loading }) => ({ ...dict, pageDictLoading: loading.effects[PAGE_DICT] }))
 export default class DictManage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {};
   }
   componentDidMount = () => {
+    // 分页
     this.props.dispatch(createAction(PAGE_DICT)({}));
+  };
+
+  /**
+   * @description 表格变化
+   * @private
+   * @memberof DictManage
+   */
+  private handleTableChange = (
+    pagination: PaginationConfig,
+    filters: Record<string | number | symbol, string[]>,
+    sorter: SorterResult<any>,
+    extra: TableCurrentDataSource<any>
+  ) => {
+    // 参数
+    const params = { ...pagination };
+    // 分页
+    this.props.dispatch(createAction(PAGE_DICT)(params));
   };
 
   /**
@@ -51,22 +74,62 @@ export default class DictManage extends React.Component<Props, State> {
   };
 
   /**
+   * @description 设置
+   * @private
+   * @memberof DictManage
+   */
+  private setSubDictVisible = (visible: boolean) => {
+    this.setState({
+      addSubDictVisible: visible,
+    });
+  };
+
+  /**
    * @description 保存字典
    * @private
    * @memberof DictManage
    */
-
   private saveDict = (fields: any) => {
-    this.props.dispatch(createAction(ADD_DICT)({ ...fields }));
+    this.props.dispatch(
+      createActions(ADD_DICT)({ ...fields })(() => {
+        // 隐藏
+        this.setDictVisible(false);
+      })
+    );
   };
+  /**
+   * @description 保存子字典
+   * @private
+   * @memberof DictManage
+   */
+  private saveSubDict = (fields: any, mode: string) => {
+    switch (mode) {
+      // 保存
+      case 'save':
+        console.log(fields);
+
+        this.props.dispatch(createAction(TREE_DICT)({ ...fields }));
+        break;
+      // 更新
+      case 'update':
+        console.log(fields);
+        this.props.dispatch(createAction(UPDATE_DICT)({ ...fields }));
+        break;
+      default:
+        break;
+    }
+  };
+
   /**
    * @description 查看字典
    * @private
    * @memberof DictManage
    */
-  private checkDict = record => {
-    this.setState({ dictMode: 'check', dictItem: record });
-    this.setDictVisible(true);
+  private checkDict = (record: ListDictItem) => {
+    // 赋值
+    this.setState({ dictItem: record });
+    // 显示
+    this.setSubDictVisible(true);
   };
 
   /**
@@ -75,7 +138,6 @@ export default class DictManage extends React.Component<Props, State> {
    * @memberof DictManage
    */
   private addDict = () => {
-    this.setState({ dictMode: 'add', dictItem: null });
     this.setDictVisible(true);
   };
 
@@ -126,7 +188,7 @@ export default class DictManage extends React.Component<Props, State> {
    * @memberof DictManage
    */
   render() {
-    const { addDictVisible, dictItem } = this.state;
+    const { addDictVisible, addSubDictVisible, dictItem } = this.state;
     const { dictPage, pageDictLoading } = this.props;
     return (
       <ContentLayout>
@@ -137,15 +199,26 @@ export default class DictManage extends React.Component<Props, State> {
             </Button>
           </div>
           {/* 表格 */}
-          <BaseTable columns={this.columns} data={dictPage} loading={pageDictLoading} />
+          <BaseTable
+            columns={this.columns}
+            data={dictPage}
+            loading={pageDictLoading}
+            onChange={this.handleTableChange}
+          />
         </div>
         {/* 添加字典 */}
-        {addDictVisible && (
-          <AddDict
-            visible={addDictVisible}
-            handleOk={this.saveDict}
+        <AddDict
+          visible={addDictVisible}
+          handleOk={this.saveDict}
+          handleCancel={() => this.setDictVisible(false)}
+        />
+        {/* 查看字典 */}
+        {addSubDictVisible && (
+          <AddSubDict
+            visible={addSubDictVisible}
+            handleOk={this.saveSubDict}
             item={dictItem}
-            handleCancel={() => this.setDictVisible(false)}
+            handleCancel={() => this.setSubDictVisible(false)}
           />
         )}
       </ContentLayout>

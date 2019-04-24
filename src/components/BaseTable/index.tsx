@@ -1,6 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
-import { TableProps } from 'antd/lib/table';
+import { TableProps, PaginationConfig } from 'antd/lib/table';
 import styles from './index.less';
 import { PageDictItem } from '@/interface/upms/dict';
 

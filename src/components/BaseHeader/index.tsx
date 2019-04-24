@@ -53,7 +53,7 @@ export class BaseHeader extends React.Component<Props, State> {
     return (
       <div>
         <div className={styles.header}>
-          <h2 className={styles.title}>叁果科技管理后台</h2>
+          <h2 className={styles.title}>尼克魔法管理后台</h2>
           {/* 一级菜单 */}
           <div className={styles.menu}>
             <Menu

@@ -27,7 +27,7 @@ export class MemberFooter extends React.Component<Props, State> {
         <GlobalFooter
           copyright={
             <Fragment>
-              Copyright <Icon type="copyright" /> 2018 叁果科技出品
+              Copyright <Icon type="copyright" /> 2018 尼克魔法出品
             </Fragment>
           }
         />
