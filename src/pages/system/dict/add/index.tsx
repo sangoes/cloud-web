@@ -13,7 +13,7 @@ interface Props extends FormComponentProps {
 interface State {}
 
 /**
- * @description 添加子字典
+ * @description 添加字典
  * @author jerrychir
  * @export
  * @class AddDict
@@ -59,7 +59,7 @@ class AddDict extends React.Component<Props, State> {
         {/* 字典名称 */}
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="字典名称">
           {form.getFieldDecorator('dictValue', {
-            rules: [{ required: true }],
+            rules: [{ required: true, message: '字典名称不能为空' }],
           })(<Input placeholder="字典名称" />)}
         </FormItem>
         {/* 字典值 */}

@@ -11,7 +11,7 @@ import {
 } from 'antd/lib/table';
 import { connect } from 'dva';
 import { createActions, createAction } from '@/utils';
-import { ListDictItem, PageDictItem, TreeDict } from '@/interface/upms/dict';
+import { ListDictItem, PageDictItem } from '@/interface/upms/dict';
 import { ADD_DICT, PAGE_DICT, BATCH_REMOVE_DICT } from '@/actions/upms/dict';
 import AddDict from './add';
 import AddSubDict from './check';
@@ -28,7 +28,7 @@ interface State {
   addDictVisible?: boolean;
   addSubDictVisible?: boolean;
   dictItem?: ListDictItem;
-  selectedRows: [];
+  selectedRows: ListDictItem[];
 }
 
 /**

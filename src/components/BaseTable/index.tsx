@@ -5,7 +5,7 @@ import styles from './index.less';
 import { PageDictItem } from '@/interface/upms/dict';
 
 interface Props extends TableProps<any> {
-  data?: PageDictItem;
+  data?: any;
   onSelectRow?: any;
 }
 
