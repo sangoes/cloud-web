@@ -16,6 +16,7 @@ import AddOauth from './add';
 import { PAGE_OAUTH, ADD_OAUTH, BATCH_REMOVE_OAUTH, REMOVE_OAUTH } from '@/actions/upms/oauth';
 
 const confirm = Modal.confirm;
+const approve = ['是', '否'];
 
 interface Props {
   dispatch?: any;
@@ -26,6 +27,8 @@ interface Props {
 interface State {
   selectedRows: ListOauthItem[];
   addOauthVisible?: boolean;
+  oauthItem?: ListOauthItem;
+  oauthStatus?: 'save' | 'check' | 'edit';
 }
 
 /**
@@ -63,6 +66,15 @@ export default class OauthPage extends React.Component<Props, State> {
     this.setState({
       addOauthVisible: visible,
     });
+  };
+  /**
+   * @description 新建授权表
+   * @private
+   * @memberof OauthPage
+   */
+  private newOauth = () => {
+    this.setState({ oauthItem: null, oauthStatus: 'save' });
+    this.setAddOauthVisible(true);
   };
 
   /**
@@ -150,7 +162,20 @@ export default class OauthPage extends React.Component<Props, State> {
    * @private
    * @memberof OauthPage
    */
-  private checkOauth = (record: ListOauthItem) => {};
+  private checkOauth = (record: ListOauthItem) => {
+    this.setState({ oauthItem: record, oauthStatus: 'check' });
+    this.setAddOauthVisible(true);
+  };
+
+  /**
+   * @description 编辑Oauth
+   * @private
+   * @memberof OauthPage
+   */
+  private editOauth = (record: ListOauthItem) => {
+    this.setState({ oauthItem: record, oauthStatus: 'edit' });
+    this.setAddOauthVisible(true);
+  };
 
   /**
    * @description 更多按钮
@@ -171,6 +196,7 @@ export default class OauthPage extends React.Component<Props, State> {
   private handleMoreMenu = (key: any, item: ListOauthItem) => {
     switch (key) {
       case 'edit':
+        this.editOauth(item);
         break;
       case 'delete':
         this.deleteOauth(item);
@@ -188,11 +214,6 @@ export default class OauthPage extends React.Component<Props, State> {
    */
   columns: ColumnProps<ListOauthItem>[] = [
     {
-      key: 'des',
-      title: '备注',
-      dataIndex: 'des',
-    },
-    {
       key: 'clientId',
       title: '客户端ID',
       dataIndex: 'clientId',
@@ -203,11 +224,6 @@ export default class OauthPage extends React.Component<Props, State> {
       dataIndex: 'clientSecret',
     },
     {
-      key: 'resourceIds',
-      title: '资源ID',
-      dataIndex: 'resourceIds',
-    },
-    {
       key: 'scope',
       title: '授权域',
       dataIndex: 'scope',
@@ -216,6 +232,11 @@ export default class OauthPage extends React.Component<Props, State> {
       key: 'authorizedGrantTypes',
       title: '授权模式',
       dataIndex: 'authorizedGrantTypes',
+    },
+    {
+      key: 'resourceIds',
+      title: '资源ID',
+      dataIndex: 'resourceIds',
     },
     {
       key: 'webServerRedirectUri',
@@ -246,6 +267,14 @@ export default class OauthPage extends React.Component<Props, State> {
       key: 'autoapprove',
       title: '是否自动放行',
       dataIndex: 'autoapprove',
+      render(val) {
+        return <div>{approve[val]}</div>;
+      },
+    },
+    {
+      key: 'des',
+      title: '备注',
+      dataIndex: 'des',
     },
     {
       title: '操作',
@@ -271,13 +300,13 @@ export default class OauthPage extends React.Component<Props, State> {
    * @memberof OauthPage
    */
   render() {
-    const { selectedRows, addOauthVisible } = this.state;
+    const { selectedRows, addOauthVisible, oauthItem, oauthStatus } = this.state;
     const { oauthPage, pageOauthLoading } = this.props;
     return (
       <ContentLayout>
         <div>
           <div className={styles.tableList}>
-            <Button icon="plus" type="primary" onClick={() => this.setAddOauthVisible(true)}>
+            <Button icon="plus" type="primary" onClick={this.newOauth}>
               新建授权表
             </Button>
             {selectedRows.length > 0 && <Button onClick={this.batchDeleteOauth}>批量删除</Button>}
@@ -295,6 +324,8 @@ export default class OauthPage extends React.Component<Props, State> {
         <AddOauth
           visible={addOauthVisible}
           handleOk={this.saveOauth}
+          item={oauthItem}
+          status={oauthStatus}
           handleCancel={() => this.setAddOauthVisible(false)}
         />
       </ContentLayout>

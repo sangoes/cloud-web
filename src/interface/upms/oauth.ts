@@ -1,3 +1,4 @@
+import { TreeDict } from '@/interface/upms/dict';
 /**
  * 授权表接口
  */
@@ -5,6 +6,7 @@ export interface OauthState {
   oauthList: ListOauthItem[];
   oauthPage: {};
   oauth: {};
+  grantType: TreeDict[];
 }
 
 /**

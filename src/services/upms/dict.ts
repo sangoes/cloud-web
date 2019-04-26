@@ -101,3 +101,14 @@ export async function pageDict(params) {
 export async function treeDict(params) {
   return request(`/api/upms/dict/tree/${params}`);
 }
+
+/**
+ * @description 根据key获取字典表树形
+ * @author jerrychir
+ * @export
+ * @param {*} params
+ * @returns
+ */
+export async function treeDictKey(params) {
+  return request(`/api/upms/dict/tree/key/${params}`);
+}

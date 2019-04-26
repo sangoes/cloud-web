@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { DvaModel, ReduxAction, ReduxSagaEffects } from '@/interface';
 import { OauthState } from '@/interface/upms/oauth';
 import * as oauth from '@/services/upms/oauth';
+import * as dict from '@/services/upms/dict';
 import { SAVE } from '@/actions/app';
 
 const NAMESPACE = 'oauth';
@@ -16,6 +17,7 @@ const model: DvaModel<OauthState> = {
     oauthList: [],
     oauthPage: [],
     oauth: {},
+    grantType: [],
   },
   effects: {
     // 添加授权表
@@ -23,6 +25,8 @@ const model: DvaModel<OauthState> = {
       const response = yield call(oauth.addOauth, payload);
       if (check(response)) {
         message.success(response.msg);
+        // 分页
+        yield put(createAction('page')({}));
         callback && callback();
       }
     },
@@ -31,6 +35,8 @@ const model: DvaModel<OauthState> = {
       const response = yield call(oauth.removeOauth, payload);
       if (check(response)) {
         message.success(response.msg);
+        // 分页
+        yield put(createAction('page')({}));
         callback && callback();
       }
     },
@@ -39,6 +45,8 @@ const model: DvaModel<OauthState> = {
       const response = yield call(oauth.batchRemoveOauth, payload);
       if (check(response)) {
         message.success(response.msg);
+        // 分页
+        yield put(createAction('page')({}));
         callback && callback();
       }
     },
@@ -47,6 +55,8 @@ const model: DvaModel<OauthState> = {
       const response = yield call(oauth.updateOauth, payload);
       if (check(response)) {
         message.success(response.msg);
+        // 分页
+        yield put(createAction('page')({}));
         callback && callback();
       }
     },
@@ -71,6 +81,14 @@ const model: DvaModel<OauthState> = {
       const response = yield call(oauth.pageOauth, payload);
       if (check(response)) {
         yield put(createAction(SAVE)({ oauthPage: response.data }));
+        callback && callback();
+      }
+    },
+    // 获取授权模式
+    *grantType({ payload, callback }: ReduxAction, { call, put }: ReduxSagaEffects) {
+      const response = yield call(dict.treeDictKey, payload);
+      if (check(response)) {
+        yield put(createAction(SAVE)({ grantType: response.data }));
         callback && callback();
       }
     },

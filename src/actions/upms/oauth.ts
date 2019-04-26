@@ -33,3 +33,8 @@ export const UPDATE_OAUTH = 'oauth/update';
  * 根据id获取授权表
  */
 export const GET_OAUTH = 'oauth/getById';
+
+/**
+ * 授权模式
+ */
+export const GRANT_TYPE = 'oauth/grantType';
