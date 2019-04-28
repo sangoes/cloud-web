@@ -28,6 +28,8 @@ interface Props {
   dispatch?: any;
   oauthPage: PageOauthItem;
   pageOauthLoading: boolean;
+  addOauthLoading: boolean;
+  editOauthLoading: boolean;
 }
 
 interface State {
@@ -44,7 +46,12 @@ interface State {
  * @class OauthPage
  * @extends {React.Component<Props, State>}
  */
-@connect(({ oauth, loading }) => ({ ...oauth, pageOauthLoading: loading.effects[PAGE_OAUTH] }))
+@connect(({ oauth, loading }) => ({
+  ...oauth,
+  pageOauthLoading: loading.effects[PAGE_OAUTH],
+  addOauthLoading: loading.effects[ADD_OAUTH],
+  editOauthLoading: loading.effects[UPDATE_OAUTH],
+}))
 export default class OauthPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -90,8 +97,6 @@ export default class OauthPage extends React.Component<Props, State> {
    */
   private saveOauth = (fields: any, status: string) => {
     if (status === 'edit') {
-      console.log(fields);
-
       this.props.dispatch(
         createActions(UPDATE_OAUTH)({ ...fields })(() => {
           // 隐藏
@@ -318,7 +323,7 @@ export default class OauthPage extends React.Component<Props, State> {
    */
   render() {
     const { selectedRows, addOauthVisible, oauthItem, oauthStatus } = this.state;
-    const { oauthPage, pageOauthLoading } = this.props;
+    const { oauthPage, pageOauthLoading, addOauthLoading, editOauthLoading } = this.props;
     return (
       <ContentLayout>
         <div>
@@ -343,6 +348,7 @@ export default class OauthPage extends React.Component<Props, State> {
           handleOk={this.saveOauth}
           item={oauthItem}
           status={oauthStatus}
+          confirmLoading={addOauthLoading || editOauthLoading}
           handleCancel={() => this.setAddOauthVisible(false)}
         />
       </ContentLayout>

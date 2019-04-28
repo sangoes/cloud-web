@@ -14,6 +14,7 @@ interface Props extends FormComponentProps {
   dispatch?: any;
   visible?: boolean;
   item?: ListOauthItem;
+  confirmLoading?: boolean;
   status?: 'save' | 'check' | 'edit';
   handleOk?: (value: string, status: string) => any;
   handleCancel?: () => void;
@@ -82,7 +83,7 @@ class AddOauth extends React.Component<Props, State> {
    * @memberof AddOauth
    */
   render() {
-    const { visible, handleCancel, form, grantType, item, status } = this.props;
+    const { visible, handleCancel, form, grantType, item, status, confirmLoading } = this.props;
     const treeData = grantType && grantType.length > 0 && grantType[0].children;
     const disabled = status === 'check' ? true : false;
     const title =
@@ -98,7 +99,7 @@ class AddOauth extends React.Component<Props, State> {
         onCancel={handleCancel}
         width="800px"
         okButtonProps={{ disabled: disabled }}
-        // confirmLoading={confirmLoading}
+        confirmLoading={confirmLoading}
       >
         <Row gutter={24}>
           <div className={styles.formList}>
