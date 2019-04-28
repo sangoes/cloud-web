@@ -13,7 +13,13 @@ import {
 import { connect } from 'dva';
 import { createAction, createActions } from '@/utils';
 import AddOauth from './add';
-import { PAGE_OAUTH, ADD_OAUTH, BATCH_REMOVE_OAUTH, REMOVE_OAUTH } from '@/actions/upms/oauth';
+import {
+  PAGE_OAUTH,
+  ADD_OAUTH,
+  BATCH_REMOVE_OAUTH,
+  REMOVE_OAUTH,
+  UPDATE_OAUTH,
+} from '@/actions/upms/oauth';
 
 const confirm = Modal.confirm;
 const approve = ['是', '否'];
@@ -82,13 +88,24 @@ export default class OauthPage extends React.Component<Props, State> {
    * @private
    * @memberof OauthPage
    */
-  private saveOauth = (fields: any) => {
-    this.props.dispatch(
-      createActions(ADD_OAUTH)({ ...fields })(() => {
-        // 隐藏
-        this.setAddOauthVisible(false);
-      })
-    );
+  private saveOauth = (fields: any, status: string) => {
+    if (status === 'edit') {
+      console.log(fields);
+
+      this.props.dispatch(
+        createActions(UPDATE_OAUTH)({ ...fields })(() => {
+          // 隐藏
+          this.setAddOauthVisible(false);
+        })
+      );
+    } else {
+      this.props.dispatch(
+        createActions(ADD_OAUTH)({ ...fields })(() => {
+          // 隐藏
+          this.setAddOauthVisible(false);
+        })
+      );
+    }
   };
 
   /**

@@ -15,7 +15,7 @@ interface Props extends FormComponentProps {
   visible?: boolean;
   item?: ListOauthItem;
   status?: 'save' | 'check' | 'edit';
-  handleOk?: (value: string) => any;
+  handleOk?: (value: string, status: string) => any;
   handleCancel?: () => void;
   grantType?: TreeDict[];
 }
@@ -52,11 +52,12 @@ class AddOauth extends React.Component<Props, State> {
    * @memberof AddOauth
    */
   private handleOk = () => {
-    const { form, handleOk } = this.props;
+    const { form, handleOk, status, item } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      item && (fieldsValue.id = item.id);
       fieldsValue.authorizedGrantTypes = fieldsValue.authorizedGrantTypes.join(',');
-      handleOk(fieldsValue);
+      handleOk(fieldsValue, status);
     });
   };
 
