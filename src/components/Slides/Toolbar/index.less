@@ -1,0 +1,22 @@
+@import '../utils.less';
+.background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: @tool-bar-height;
+  background: #ffffff;
+  margin-bottom: 80px;
+  .word {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    .type {
+      display: flex;
+      flex-direction: row;
+      margin-top: 5px;
+    }
+  }
+}

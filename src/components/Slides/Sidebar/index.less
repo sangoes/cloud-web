@@ -1,0 +1,29 @@
+@import '../utils.less';
+
+.sortPane {
+  padding-top: 4.5rem;
+  z-index: 999;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  overflow-y: scroll;
+}
+.content {
+  display: flex;
+  flex-direction: row;
+  .text {
+    width: 1.3rem;
+    text-align: right;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+    font-size: 0.8rem;
+  }
+  .pane {
+    border-color: rgba(0, 21, 41, 0.3);
+    border-width: 1px;
+    margin-bottom: 15px;
+    background: #ffffff;
+    margin-right: 20px;
+  }
+  .pane:hover {
+    border-style: solid;
+  }
+}

@@ -19,6 +19,10 @@ const BasicLayout: BasicLayoutComponent<BasicLayoutProps> = props => {
   if (currentPath.startsWith('/member')) {
     return <MemberLayout>{props.children}</MemberLayout>;
   }
+  // 注册 登录
+  if (currentPath.startsWith('/slides')) {
+    return <div>{props.children}</div>;
+  }
   return <MainLayout>{props.children}</MainLayout>;
 };
 
