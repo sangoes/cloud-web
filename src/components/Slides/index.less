@@ -1,12 +1,11 @@
 @import './utils.less';
 .background {
-  background: #e6e6e6;
+  background: @main-color;
   overflow: hidden;
   .layout {
     display: flex;
-    direction: ltr;
     width: 100%;
-    height: calc(100vh - @bottom-bar-height);
-    background-color: #e6e6e6;
+    height: calc(100vh - (@tool-bar-height + @bottom-bar-height));
+    background-color: @main-color;
   }
 }

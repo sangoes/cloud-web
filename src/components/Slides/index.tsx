@@ -4,6 +4,7 @@ import { ToolBar } from './Toolbar';
 import { Content } from './Content';
 import { BottomBar } from './Bottombar';
 import { SiderBar } from './Sidebar';
+import { RemarkBar } from './RemarkBar';
 
 interface Props {}
 
@@ -29,7 +30,7 @@ export class Slide extends React.Component<Props, State> {
         <div className={styles.layout}>
           <SiderBar />
           <Content />
-          <div style={{ width: '16rem', backgroundColor: '#f32' }}>dsfdsaf</div>
+          <RemarkBar />
         </div>
         <BottomBar />
       </div>
